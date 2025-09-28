@@ -144,7 +144,7 @@ export default function SousTraitantsTable() {
                     </td>
                     <td className="py-5 px-3">
                       <Link
-                        to={`/admin/client/sous-traitants/edit/${s.id}`}
+                        to={`/admin/clients/subcontractors/${s.id}`}
                         className="text-primary hover:underline text-xs"
                       >
                         Edit

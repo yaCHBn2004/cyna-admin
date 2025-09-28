@@ -9,13 +9,14 @@ import { buildApiUrl, getAuthHeaders } from "./config";
 
 export async function fetchOrders({
   page = 1,
-  paid = null,
+  paid = true,
   per_page = 10,
   search = "",
   status = null,
-  user_type = "admin",
+
 } = {}) {
-  const url = new URL(buildApiUrl("orders"));
+  // ✅ use buildApiUrl
+  const url = new URL(buildApiUrl("admin/orders"));
   const params = new URLSearchParams();
 
   params.append("page", page);
@@ -23,7 +24,7 @@ export async function fetchOrders({
   if (search) params.append("search", search);
   if (status) params.append("status", status);
   if (paid !== null) params.append("paid", paid);
-  if (user_type) params.append("user_type", user_type);
+
 
   url.search = params.toString();
 
@@ -33,11 +34,14 @@ export async function fetchOrders({
   });
 
   const json = await response.json();
-  if (!response.ok) throw new Error(json.message || "Erreur lors de la récupération des commandes.");
 
-  return json.data; // ✅ ici
+  if (!response.ok) {
+    throw new Error(json.message || "Erreur lors de la récupération des commandes.");
+  }
+
+  // API format has `orders` and `pagination`
+  return json.orders || [];
 }
-
 // services/statistics.js
 
 
