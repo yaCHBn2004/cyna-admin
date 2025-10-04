@@ -46,7 +46,7 @@ export async function fetchClientTimeSeries(
   if (time_value) params.append("time_value", time_value);
   if (time_period) params.append("time_period", time_period);
   if (last_days) params.append("last_days", last_days);
-  if (metric) params.append("metric", metric);
+  if (metric) params.append("metric_type", metric);
 
   try {
     const res = await fetch(`${url}?${params.toString()}`, {

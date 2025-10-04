@@ -58,22 +58,27 @@ export async function fetchOrders({
  */
 export async function getFilteredData({
   metricType = "revenue",
-  timePeriod = "month",
-  timeValue = "2024-07",
+  time_period,
+  time_value,
+  last_days,
   limit = 5,
   serviceType = null,
   langCode = "fr",
 } = {}) {
   const queryParams = new URLSearchParams({
     metric_type: metricType,
-    time_period: timePeriod,
-    time_value: timeValue,
     limit: limit.toString(),
   });
 
-  if (serviceType) {
-    queryParams.append("service_type", serviceType);
+  if (time_period && time_value) {
+    queryParams.append("time_period", time_period);
+    queryParams.append("time_value", time_value);
+  } else if (last_days) {
+    queryParams.append("last_days", last_days);
   }
+
+  if (serviceType) queryParams.append("service_type", serviceType);
+
 
   const url = `${buildApiUrl("statistics/services/top")}?${queryParams.toString()}`;
 

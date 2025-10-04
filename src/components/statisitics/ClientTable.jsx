@@ -140,7 +140,15 @@ export default function ClientTable({ onRowClick, timeRange }) {
                       setSelectedUserId(client.user_id);
                       onRowClick?.(client.user_id);
                     }}
-                    sx={{ cursor: "pointer" }}
+                    sx={{
+                      cursor: "pointer",
+                      "&.Mui-selected": {
+                        backgroundColor: "var(--lightBlue)",
+                        "&:hover": {
+                          backgroundColor: "var(--lightBlue)",
+                        },
+                      },
+                    }}
                   >
                     <TableCell sx={{ color: "var(--textMain)" }}>
                       {client.name}

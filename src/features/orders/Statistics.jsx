@@ -73,50 +73,134 @@ export default function Statistics() {
         )}
       </div>
 
-      {/* --- Filters --- */}
-      <div className="flex justify-between items-end ">
-        <div>
-          {loading ? (
-            <div className="w-1/3 h-6 bg-[var(--skeleton)] rounded animate-pulse"></div>
-          ) : (
-            <h1 className="text-[22px] col-span-full text-[var(--primary)]">
-              Statistics
-            </h1>
-          )}
-        </div>
-        <div className="flex gap-4">
-          {loading ? (
-            <>
-              <div className="w-20 h-6 bg-[var(--skeleton)] rounded animate-pulse"></div>
-              <div className="w-20 h-6 bg-[var(--skeleton)] rounded animate-pulse"></div>
-            </>
-          ) : (
-            <>
-              <FormControl variant="standard" size="small">
-                <Select
-                  value={metricType}
-                  onChange={(e) => setMetricType(e.target.value)}
-                  disableUnderline
-                >
-                  <MenuItem value="revenue">Revenue</MenuItem>
-                  <MenuItem value="order_count">Orders</MenuItem>
-                </Select>
-              </FormControl>
-              <FormControl variant="standard" size="small">
-                <Select
-                  value={timeRange}
-                  onChange={(e) => setTimeRange(e.target.value)}
-                  disableUnderline
-                >
-                  <MenuItem value="week">Last Week</MenuItem>
-                  <MenuItem value="month">Last Month</MenuItem>
-                  <MenuItem value="year">Last Year</MenuItem>
-                </Select>
-              </FormControl>
-            </>
-          )}
-        </div>
-      </div>
+     {/* --- Filters --- */}
+<div className="flex justify-between items-end ">
+  <div>
+    {loading ? (
+      <div className="w-1/3 h-6 bg-[var(--skeleton)] rounded animate-pulse"></div>
+    ) : (
+      <h1 className="text-[22px] col-span-full text-[var(--primary)]">
+        Statistics
+      </h1>
+    )}
+  </div>
+  <div className="flex gap-4">
+    {loading ? (
+      <>
+        <div className="w-20 h-6 bg-[var(--skeleton)] rounded animate-pulse"></div>
+        <div className="w-20 h-6 bg-[var(--skeleton)] rounded animate-pulse"></div>
+      </>
+    ) : (
+      <>
+        <FormControl variant="standard" size="small">
+          <Select
+            value={metricType}
+            onChange={(e) => setMetricType(e.target.value)}
+            disableUnderline
+            MenuProps={{
+              PaperProps: {
+                sx: {
+                  backgroundColor: "var(--primBg)",
+                  "& .MuiMenuItem-root:hover": {
+                    backgroundColor: "var(--lightBlue)",
+                  },
+                },
+              },
+            }}
+            sx={{
+              color: "var(--textMain)",
+              "& .MuiSelect-icon": { color: "var(--textMain)" },
+              backgroundColor: "var(--primBg)",
+            }}
+          >
+            <MenuItem
+              value="revenue"
+              sx={{
+                color: "var(--primary)",
+                "&.Mui-selected": {
+                  backgroundColor: "var(--lightBlue)",
+                  color: "var(--primary)",
+                },
+              }}
+            >
+              Revenue
+            </MenuItem>
+            <MenuItem
+              value="order_count"
+              sx={{
+                color: "var(--primary)",
+                "&.Mui-selected": {
+                  backgroundColor: "var(--lightBlue)",
+                  color: "var(--primary)",
+                },
+              }}
+            >
+              Orders
+            </MenuItem>
+          </Select>
+        </FormControl>
+
+        <FormControl variant="standard" size="small">
+          <Select
+            value={timeRange}
+            onChange={(e) => setTimeRange(e.target.value)}
+            disableUnderline
+            MenuProps={{
+              PaperProps: {
+                sx: {
+                  backgroundColor: "var(--primBg)",
+                  "& .MuiMenuItem-root:hover": {
+                    backgroundColor: "var(--lightBlue)",
+                  },
+                },
+              },
+            }}
+            sx={{
+              color: "var(--textMain)",
+              "& .MuiSelect-icon": { color: "var(--textMain)" },
+              backgroundColor: "var(--primBg)",
+            }}
+          >
+            <MenuItem
+              value="week"
+              sx={{
+                color: "var(--primary)",
+                "&.Mui-selected": {
+                  backgroundColor: "var(--lightBlue)",
+                },
+              }}
+            >
+              Last Week
+            </MenuItem>
+            <MenuItem
+              value="month"
+              sx={{
+                color: "var(--primary)",
+                "&.Mui-selected": {
+                  backgroundColor: "var(--lightBlue)",
+                },
+              }}
+            >
+              Last Month
+            </MenuItem>
+            <MenuItem
+              value="year"
+              sx={{
+                color: "var(--primary)",
+                "&.Mui-selected": {
+                  backgroundColor: "var(--lightBlue)",
+                },
+              }}
+            >
+              Last Year
+            </MenuItem>
+          </Select>
+        </FormControl>
+      </>
+    )}
+  </div>
+</div>
+
 
       {/* --- Charts --- */}
       <div className="flex flex-col md:flex-row gap-4">

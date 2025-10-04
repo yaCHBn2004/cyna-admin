@@ -23,11 +23,11 @@ export function ProfessionalChart() {
         const chartData = [
           {
             name: "Professional",
-            value: parseFloat(res.professional_revenue) || 0,
+            value: parseFloat(res.professional_count) || 0,
           },
           {
             name: "Sous Traitant",
-            value: parseFloat(res.sous_traitant_revenue) || 0,
+            value: parseFloat(res.sous_traitant_count) || 0,
           },
         ];
 
@@ -83,12 +83,12 @@ export function ProfessionalChart() {
                 }
                 contentStyle={{
                   backgroundColor: "white",
-                  border: "1px solid #e5e7eb",
+                  border: "1px solid var(--primary)",
                   borderRadius: "8px",
                   boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
                 }}
               />
-              <Bar dataKey="value" fill="#60a5fa" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="value" fill="var(--chart-primary)" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         )}

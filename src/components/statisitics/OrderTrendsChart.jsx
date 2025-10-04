@@ -28,7 +28,7 @@ export function OrderTrendsChart({ clientId, metric, timeRange }) {
       case "month": {
         return {
           time_period: "days",
-          time_value: `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`, // e.g., "2025-08"
+          time_value: `${now.getFullYear()}-${String(now.getMonth() ).padStart(2, "0")}`, // e.g., "2025-08"
         };
       }
 

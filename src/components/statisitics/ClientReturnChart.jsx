@@ -15,7 +15,7 @@ export function ClientReturnChart({ title = "Do clients come back?" }) {
         const formattedData = labels.map((label, index) => ({
           name: label,
           value: data[index],
-          color: index === 1 ? "#60a5fa" : "#fb923c", // 0 = Did not return, 1 = Returned
+          color: index === 1 ? "var(--chart-primary)" : "var(--accent)", // 0 = Did not return, 1 = Returned
         }));
 
         setChartData(formattedData);
@@ -62,13 +62,13 @@ export function ClientReturnChart({ title = "Do clients come back?" }) {
       {loading ? (
         <div className="animate-pulse flex flex-col items-center justify-center h-full gap-6 w-full">
           {/* Skeleton title */}
-          <div className="h-5 w-1/2 bg-gray-200 rounded mb-4"></div>
+          <div className="h-5 w-1/2 var(--skeleton) rounded mb-4"></div>
           {/* Circle skeleton */}
-          <div className="w-40 h-40 rounded-full bg-gray-200"></div>
+          <div className="w-40 h-40 rounded-full var(--skeleton)"></div>
           {/* Legend skeleton */}
           <div className="flex gap-4">
-            <div className="h-4 w-24 bg-gray-200 rounded"></div>
-            <div className="h-4 w-24 bg-gray-200 rounded"></div>
+            <div className="h-4 w-24 var(--skeleton) rounded"></div>
+            <div className="h-4 w-24 var(--skeleton) rounded"></div>
           </div>
         </div>
       ) : (
@@ -93,7 +93,7 @@ export function ClientReturnChart({ title = "Do clients come back?" }) {
               <Tooltip
                 contentStyle={{
                   backgroundColor: "white",
-                  border: "1px solid #e5e7eb",
+                  border: "1px solid var(--border-color)",
                   borderRadius: "8px",
                   boxShadow: "0 4px 6px -1px rgba(0,0,0,0.1)",
                 }}
