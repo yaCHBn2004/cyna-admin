@@ -159,6 +159,8 @@ export default function OrderDetails() {
       </div>
 
       {/* Files Section */}
+      <div className="bg-amber-300">
+
       {order.files && order.files.length > 0 && (
         <div className="flex flex-col items-start gap-4 p-4 max-w-7xl mx-auto">
           <div className="flex items-center justify-between w-full">
@@ -187,6 +189,8 @@ export default function OrderDetails() {
           </div>
         </div>
       )}
+      
+      </div>
 
       {/* Order Timeline */}
       <OrderTimeline order={order} onUpdate={handleTimelineUpdate} />
@@ -235,11 +239,12 @@ function FilePreviewCard({ file, onDownload }) {
 
   return (
     <>
+      {/* Card */}
       <div
         className="relative group cursor-pointer rounded-lg overflow-hidden border-2 border-gray-200 hover:border-blue-500 transition-all bg-white"
         onClick={() => setPreviewOpen(true)}
       >
-        <div className="w-48 h-32 flex items-center justify-center bg-gray-50">
+        <div className="w-80 min-h-60 flex items-center justify-center bg-gray-50">
           {fileType === "image" && !imageError ? (
             <img
               src={file.url}
@@ -247,15 +252,10 @@ function FilePreviewCard({ file, onDownload }) {
               className="w-full h-full object-cover"
               onError={() => setImageError(true)}
             />
-          ) : fileType === "pdf" ? (
-            <div className="flex flex-col items-center gap-2 text-red-600">
-              <FileText size={48} />
-              <span className="text-xs font-medium">PDF</span>
-            </div>
           ) : (
             <div className="flex flex-col items-center gap-2 text-gray-600">
               <FileText size={48} />
-              <span className="text-xs font-medium">Fichier</span>
+              <span className="text-xs font-medium">{fileType.toUpperCase()}</span>
             </div>
           )}
         </div>
@@ -265,8 +265,7 @@ function FilePreviewCard({ file, onDownload }) {
             e.stopPropagation();
             onDownload();
           }}
-          className="absolute top-2 right-2 p-2 bg-blue-600 text-white rounded-full opacity-0 group-hover:opacity-100 hover:bg-blue-700 transition-all shadow-lg transform hover:scale-110"
-          aria-label={`Télécharger ${file.name}`}
+          className="absolute top-2 right-2 p-2 text-gray-900 opacity-30 group-hover:opacity-100 transition-all transform hover:scale-150"
         >
           <Download size={16} />
         </button>
@@ -276,56 +275,20 @@ function FilePreviewCard({ file, onDownload }) {
         </div>
       </div>
 
-      {previewOpen && (
+      {/* Image Preview Modal */}
+      {previewOpen && fileType === "image" && !imageError && (
         <div
-          className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4"
+          className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 cursor-pointer"
           onClick={() => setPreviewOpen(false)}
         >
-          <div
-            className="relative max-w-5xl max-h-[90vh] bg-white rounded-lg overflow-hidden"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              onClick={() => setPreviewOpen(false)}
-              className="absolute top-4 right-4 p-2 bg-gray-800 text-white rounded-full hover:bg-gray-700 transition-colors z-10"
-            >
-              <X size={20} />
-            </button>
-            <button
-              onClick={onDownload}
-              className="absolute top-4 right-16 p-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-colors z-10"
-            >
-              <Download size={20} />
-            </button>
-
-            <div className="p-8">
-              {fileType === "image" && !imageError ? (
-                <img
-                  src={file.url}
-                  alt={file.name}
-                  className="max-w-full max-h-[80vh] object-contain mx-auto"
-                  onError={() => setImageError(true)}
-                />
-              ) : fileType === "pdf" ? (
-                <iframe src={file.url} className="w-full h-[80vh]" title={file.name} />
-              ) : (
-                <div className="flex flex-col items-center gap-4 py-20">
-                  <FileText size={64} className="text-gray-400" />
-                  <p className="text-gray-600">Aperçu non disponible pour ce type de fichier</p>
-                  <button
-                    onClick={onDownload}
-                    className="mt-4 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
-                  >
-                    <Download size={20} />
-                    Télécharger le fichier
-                  </button>
-                </div>
-              )}
-              <p className="text-center text-sm text-gray-600 mt-4">{file.name}</p>
-            </div>
-          </div>
+          <img
+            src={file.url}
+            alt={file.name}
+            className="max-w-full max-h-full object-contain"
+          />
         </div>
       )}
     </>
   );
 }
+
