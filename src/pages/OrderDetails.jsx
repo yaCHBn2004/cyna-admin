@@ -159,7 +159,7 @@ export default function OrderDetails() {
       </div>
 
       {/* Files Section */}
-      <div className="bg-amber-300">
+      <div >
 
       {order.files && order.files.length > 0 && (
         <div className="flex flex-col items-start gap-4 p-4 max-w-7xl mx-auto">
@@ -170,16 +170,7 @@ export default function OrderDetails() {
                 ({order.files.length} fichier{order.files.length > 1 ? "s" : ""})
               </span>
             </h2>
-            {order.files.length > 1 && (
-              <button
-                onClick={handleDownloadAllFiles}
-                disabled={isDownloadingZip}
-                className="px-4 py-2 rounded-md bg-purple-600 text-white text-sm hover:bg-purple-700 transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                <Download size={16} className={isDownloadingZip ? "animate-bounce" : ""} />
-                {isDownloadingZip ? "Préparation du ZIP..." : "Tout télécharger (ZIP)"}
-              </button>
-            )}
+           
           </div>
 
           <div className="flex flex-wrap gap-4">
