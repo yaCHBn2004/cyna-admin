@@ -1,9 +1,17 @@
 import { useParams, Link } from "react-router-dom";
-import { Mail, Phone, User, Building, Download, X, FileText } from "lucide-react";
+import {
+  Mail,
+  Phone,
+  User,
+  Building,
+  Download,
+  X,
+  FileText,
+} from "lucide-react";
 import { useOrders } from "../context/OrdersContext";
 import OrderTimeline from "../components/OrderTimeline";
 import JSZip from "jszip";
-import { saveAs } from "file-saver";
+
 import { useState } from "react";
 
 const STATUS_MAPPING = {
@@ -19,8 +27,6 @@ export default function OrderDetails() {
   const { id } = useParams();
   const { orders, loading, error, updateOrder } = useOrders();
   const order = orders.find((o) => String(o.id) === id);
-
-  const [isDownloadingZip, setIsDownloadingZip] = useState(false);
 
   if (loading) return <div className="p-4">Chargement…</div>;
   if (error) return <div className="p-4 text-red-500">{error.message}</div>;
@@ -51,32 +57,6 @@ export default function OrderDetails() {
     }
   };
 
-  const handleDownloadAllFiles = async () => {
-    if (!order.files || order.files.length === 0) return;
-    setIsDownloadingZip(true);
-    try {
-      const zip = new JSZip();
-      await Promise.all(
-        order.files.map(async (file) => {
-          try {
-            const response = await fetch(file.url);
-            const blob = await response.blob();
-            zip.file(file.name, blob);
-          } catch (err) {
-            zip.file(`ERROR_${file.name}.txt`, `Failed to download: ${err.message}`);
-          }
-        })
-      );
-      const content = await zip.generateAsync({ type: "blob" });
-      saveAs(content, `commande_${order.id}_files.zip`);
-    } catch (err) {
-      console.error("Error creating ZIP:", err);
-      alert("Erreur lors de la création du fichier ZIP");
-    } finally {
-      setIsDownloadingZip(false);
-    }
-  };
-
   return (
     <div className="p-4 w-full h-fit flex flex-col gap-10  mb-10 mx-auto">
       {/* Breadcrumb */}
@@ -85,13 +65,17 @@ export default function OrderDetails() {
           Commandes
         </Link>
         <span className="mx-1">/</span>
-        <span className="font-semibold text-textMain">Commande #{order.id}</span>
+        <span className="font-semibold text-textMain">
+          Commande #{order.id}
+        </span>
       </nav>
 
       {/* Header */}
       <div className="flex flex-col gap-3">
         <div className="flex w-20 md:w-auto md:items-end flex-col md:flex-row gap-3">
-          <h1 className="text-2xl font-bold mb-2 md:mb-0">Commande #{order.id}</h1>
+          <h1 className="text-2xl font-bold mb-2 md:mb-0">
+            Commande #{order.id}
+          </h1>
           <span
             className={`px-3 py-1 rounded-full text-xs capitalize font-medium ${
               order.status === "cancelled"
@@ -109,7 +93,8 @@ export default function OrderDetails() {
         <div className="flex items-center gap-3">
           <span className="text-gray-500 text-sm">
             Passée le{" "}
-            {order.date || new Date(order.created_at).toLocaleDateString("fr-FR")}
+            {order.date ||
+              new Date(order.created_at).toLocaleDateString("fr-FR")}
           </span>
         </div>
       </div>
@@ -118,40 +103,63 @@ export default function OrderDetails() {
       <div className="flex flex-col items-start gap-3">
         <h2 className="text-lg font-semibold mb-3">Informations client</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 text-sm">
-          <InfoLine icon={<User size={16} />} label={order.user?.name || "Non disponible"} />
-          <InfoLine icon={<Mail size={16} />} label={order.user?.email || "Non disponible"} />
-          <InfoLine icon={<Phone size={16} />} label={order.phone || "Non disponible"} />
-          <InfoLine icon={<Building size={16} />} label={order.company || "Non disponible"} />
+          <InfoLine
+            icon={<User size={16} />}
+            label={order.user?.name || "Non disponible"}
+          />
+          <InfoLine
+            icon={<Mail size={16} />}
+            label={order.user?.email || "Non disponible"}
+          />
+          <InfoLine
+            icon={<Phone size={16} />}
+            label={order.phone || "Non disponible"}
+          />
+          <InfoLine
+            icon={<Building size={16} />}
+            label={order.company || "Non disponible"}
+          />
         </div>
-        {order.user?.email && (
+        {/* {order.user?.email && (
           <a
-            href={`mailto:${order.user.email}?subject=Commande #${order.id}&body=Bonjour ${
-              order.user.name || "Monsieur/Madame"
-            },`}
+            href={`mailto:${order.user?.email}?subject=Commande #${order.id}`}
             className="mt-4 px-3 py-1 text-sm text-white rounded-full bg-special hover:bg-special/90 transition-colors"
           >
             Contacter le client
           </a>
-        )}
+        )} */}
       </div>
 
       {/* Spécifications de la commande */}
       <div className="flex flex-col items-start gap-3">
         <h2 className="text-lg font-semibold">Spécifications de la commande</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 text-sm">
-          <SpecLine label="Produit" value={order.service?.name || order.product_name} />
-          <SpecLine label="Quantité" value={order.quantity || "Non disponible"} />
+          <SpecLine
+            label="Produit"
+            value={order.service?.name || order.product_name}
+          />
+          <SpecLine
+            label="Quantité"
+            value={order.quantity || "Non disponible"}
+          />
           <SpecLine
             label="Total"
-            value={order.total ? `${order.total.toFixed(2)} €` : "Non disponible"}
+            value={
+              order.total ? `${order.total.toFixed(2)} €` : "Non disponible"
+            }
           />
           {order.parameters &&
             Object.entries(order.parameters)
-              .filter(([_, value]) => value !== null && value !== undefined && value !== "")
+              .filter(
+                ([_, value]) =>
+                  value !== null && value !== undefined && value !== ""
+              )
               .map(([key, value]) => (
                 <SpecLine
                   key={key}
-                  label={order.parameter_mapping?.[key] || key.replace(/_/g, " ")}
+                  label={
+                    order.parameter_mapping?.[key] || key.replace(/_/g, " ")
+                  }
                   value={String(value)}
                 />
               ))}
@@ -159,87 +167,90 @@ export default function OrderDetails() {
       </div>
 
       {/* Files Section */}
-      <div >
+      <div>
+        {order.files && order.files.length > 0 && (
+          <div className="flex flex-col items-start gap-4 p-4 max-w-7xl mx-auto">
+            <div className="flex items-center justify-between w-full">
+              <h2 className="text-lg font-semibold">
+                Fichiers design
+                <span className="ml-2 text-sm text-gray-500 font-normal">
+                  ({order.files.length} fichier
+                  {order.files.length > 1 ? "s" : ""})
+                </span>
+              </h2>
+            </div>
 
-      {order.files && order.files.length > 0 && (
-        <div className="flex flex-col items-start gap-4 p-4 max-w-7xl mx-auto">
-          <div className="flex items-center justify-between w-full">
-            <h2 className="text-lg font-semibold">
-              Fichiers design
-              <span className="ml-2 text-sm text-gray-500 font-normal">
-                ({order.files.length} fichier{order.files.length > 1 ? "s" : ""})
-              </span>
-            </h2>
-           
+            <div className="flex flex-wrap gap-4">
+              {order.files.map((file) => (
+                <FilePreviewCard
+                  key={file.id}
+                  file={file}
+                  onDownload={() => handleDownloadFile(file)}
+                />
+              ))}
+            </div>
           </div>
-
-          <div className="flex flex-wrap gap-4">
-            {order.files.map((file) => (
-              <FilePreviewCard key={file.id} file={file} onDownload={() => handleDownloadFile(file)} />
-            ))}
-          </div>
-        </div>
-      )}
-      
+        )}
       </div>
 
       {/* Order Timeline */}
       <OrderTimeline order={order} onUpdate={handleTimelineUpdate} />
 
-
       {/* Informations de paiement */}
-<div className="flex flex-col items-start gap-3">
-  <h2 className="text-lg font-semibold">Informations de paiement</h2>
-  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 text-sm">
-    <SpecLine
-      label="Méthode de paiement"
-      value={order.payment_method || "Non disponible"}
-    />
-    <SpecLine
-      label="Statut du paiement"
-      value={
-        order.payment_status
-          ? order.payment_status === "paid"
-            ? "Payé"
-            : order.payment_status === "pending"
-            ? "En attente"
-            : order.payment_status === "failed"
-            ? "Échoué"
-            : order.payment_status
-          : "Non disponible"
-      }
-    />
-    <SpecLine
-      label="Montant payé"
-      value={
-        order.payment_amount
-          ? `${order.payment_amount.toFixed(2)} €`
-          : order.total
-          ? `${order.total.toFixed(2)} €`
-          : "Non disponible"
-      }
-    />
-    <SpecLine
-      label="Date du paiement"
-      value={
-        order.created_at
-          ? new Date(order.created_at).toLocaleString("fr-FR", {
-              day: "2-digit",
-              month: "2-digit",
-              year: "numeric",
-              hour: "2-digit",
-              minute: "2-digit",
-            })
-          : "Non disponible"
-      }
-    />
-  </div>
-</div>
-
+      <div className="flex flex-col items-start gap-3">
+        <h2 className="text-lg font-semibold">Informations de paiement</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 text-sm">
+          <SpecLine
+            label="Méthode de paiement"
+            value={order.payment_method || "Non disponible"}
+          />
+          <SpecLine
+            label="Statut du paiement"
+            value={
+              order.payment_status
+                ? order.payment_status === "paid"
+                  ? "Payé"
+                  : order.payment_status === "pending"
+                  ? "En attente"
+                  : order.payment_status === "failed"
+                  ? "Échoué"
+                  : order.payment_status
+                : "Non disponible"
+            }
+          />
+          <SpecLine
+            label="Montant payé"
+            value={
+              order.payment_amount
+                ? `${order.payment_amount.toFixed(2)} €`
+                : order.total
+                ? `${order.total.toFixed(2)} €`
+                : "Non disponible"
+            }
+          />
+          <SpecLine
+            label="Date du paiement"
+            value={
+              order.created_at
+                ? new Date(order.created_at).toLocaleString("fr-FR", {
+                    day: "2-digit",
+                    month: "2-digit",
+                    year: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })
+                : "Non disponible"
+            }
+          />
+        </div>
+      </div>
 
       {/* Back link */}
       <div>
-        <Link to="/admin/dashboard" className="text-primary hover:underline text-sm">
+        <Link
+          to="/admin/dashboard"
+          className="text-primary hover:underline text-sm"
+        >
           ← Retour aux commandes
         </Link>
       </div>
@@ -297,7 +308,9 @@ function FilePreviewCard({ file, onDownload }) {
           ) : (
             <div className="flex flex-col items-center gap-2 text-gray-600">
               <FileText size={48} />
-              <span className="text-xs font-medium">{fileType.toUpperCase()}</span>
+              <span className="text-xs font-medium">
+                {fileType.toUpperCase()}
+              </span>
             </div>
           )}
         </div>
@@ -333,4 +346,3 @@ function FilePreviewCard({ file, onDownload }) {
     </>
   );
 }
-

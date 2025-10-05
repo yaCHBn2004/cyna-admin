@@ -171,11 +171,8 @@ export default function OrderTimeline({ order, onUpdate }) {
 
       )}
 
-      {currentStatus === "picked_up" && !isCancelled && (
-        <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded text-green-800 text-sm">
-          ✅ Commande terminée et récupérée
-        </div>
-      )}
+    
+ 
     </div>
   );
 }
