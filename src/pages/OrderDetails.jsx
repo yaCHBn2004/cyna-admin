@@ -204,18 +204,7 @@ export default function OrderDetails() {
         </div>
       )}
 
-      {/* Download order JSON */}
-      <div className="flex flex-col items-start gap-3">
-        <h2 className="text-lg font-semibold">Données de la commande</h2>
-        <button
-          onClick={handleDownload}
-          className="px-4 py-2 rounded-md bg-gray-600 text-white text-sm hover:bg-gray-700 transition-colors flex items-center gap-2"
-        >
-          <Download size={16} />
-          Télécharger les données JSON
-        </button>
-      </div>
-
+  
       {/* Order Timeline */}
       <OrderTimeline
         order={order}
@@ -231,6 +220,8 @@ export default function OrderDetails() {
           ← Retour aux commandes
         </Link>
       </div>
+
+      
     </div>
   );
 }
