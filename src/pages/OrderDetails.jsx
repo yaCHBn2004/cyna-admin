@@ -78,7 +78,7 @@ export default function OrderDetails() {
   };
 
   return (
-    <div className="p-4 h-full w-full flex flex-col gap-10 mx-auto">
+    <div className="p-4 w-full h-fit flex flex-col gap-10  mb-10 mx-auto">
       {/* Breadcrumb */}
       <nav className="text-sm text-textMain">
         <Link to="/admin/dashboard" className="hover:underline text-primary">
@@ -186,6 +186,57 @@ export default function OrderDetails() {
       {/* Order Timeline */}
       <OrderTimeline order={order} onUpdate={handleTimelineUpdate} />
 
+
+      {/* Informations de paiement */}
+<div className="flex flex-col items-start gap-3">
+  <h2 className="text-lg font-semibold">Informations de paiement</h2>
+  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 text-sm">
+    <SpecLine
+      label="Méthode de paiement"
+      value={order.payment_method || "Non disponible"}
+    />
+    <SpecLine
+      label="Statut du paiement"
+      value={
+        order.payment_status
+          ? order.payment_status === "paid"
+            ? "Payé"
+            : order.payment_status === "pending"
+            ? "En attente"
+            : order.payment_status === "failed"
+            ? "Échoué"
+            : order.payment_status
+          : "Non disponible"
+      }
+    />
+    <SpecLine
+      label="Montant payé"
+      value={
+        order.payment_amount
+          ? `${order.payment_amount.toFixed(2)} €`
+          : order.total
+          ? `${order.total.toFixed(2)} €`
+          : "Non disponible"
+      }
+    />
+    <SpecLine
+      label="Date du paiement"
+      value={
+        order.created_at
+          ? new Date(order.created_at).toLocaleString("fr-FR", {
+              day: "2-digit",
+              month: "2-digit",
+              year: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+            })
+          : "Non disponible"
+      }
+    />
+  </div>
+</div>
+
+
       {/* Back link */}
       <div>
         <Link to="/admin/dashboard" className="text-primary hover:underline text-sm">
@@ -235,12 +286,12 @@ function FilePreviewCard({ file, onDownload }) {
         className="relative group cursor-pointer rounded-lg overflow-hidden border-2 border-gray-200 hover:border-blue-500 transition-all bg-white"
         onClick={() => setPreviewOpen(true)}
       >
-        <div className="w-80 min-h-60 flex items-center justify-center bg-gray-50">
+        <div className="w-80 h-60 flex items-center justify-center bg-gray-50">
           {fileType === "image" && !imageError ? (
             <img
               src={file.url}
               alt={file.name}
-              className="w-full h-full object-cover"
+              className="min-w-full min-h-full object-cover"
               onError={() => setImageError(true)}
             />
           ) : (
@@ -256,7 +307,7 @@ function FilePreviewCard({ file, onDownload }) {
             e.stopPropagation();
             onDownload();
           }}
-          className="absolute top-2 right-2 p-2 text-gray-900 opacity-30 group-hover:opacity-100 transition-all transform hover:scale-150"
+          className="absolute top-2 right-2 p-2 bg-primary text-white rounded-2xl opacity-30 group-hover:opacity-100 transition-all transform hover:scale-125"
         >
           <Download size={16} />
         </button>
