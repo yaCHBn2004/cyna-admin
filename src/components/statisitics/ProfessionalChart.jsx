@@ -11,7 +11,7 @@ import {
 
 import { fetchRevenueData } from "../../services/client";
 
-export function ProfessionalChart() {
+export function ProfessionalChart({ title = "Who Buys the Most from Us ?" }) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -55,7 +55,10 @@ export function ProfessionalChart() {
             </div>
           </div>
         ) : (
-          <ResponsiveContainer width="100%" height="100%">
+          <>
+          <h2 className="text-lg font-bold text-primary mb-4">{title}</h2>
+            <ResponsiveContainer width="100%" height="90%">
+            
             <BarChart
               data={data}
               margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
@@ -91,6 +94,8 @@ export function ProfessionalChart() {
               <Bar dataKey="value" fill="var(--chart-primary)" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
+          </>
+        
         )}
       </div>
     </div>

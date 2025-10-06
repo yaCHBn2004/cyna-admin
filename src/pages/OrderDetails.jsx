@@ -13,6 +13,7 @@ import OrderTimeline from "../components/OrderTimeline";
 import JSZip from "jszip";
 
 import { useState } from "react";
+import OrderStatusBadge from "../components/OrderStatusBadge";
 
 const STATUS_MAPPING = {
   order_placed: "En attente",
@@ -76,19 +77,7 @@ export default function OrderDetails() {
           <h1 className="text-2xl font-bold mb-2 md:mb-0">
             Commande #{order.id}
           </h1>
-          <span
-            className={`px-3 py-1 rounded-full text-xs capitalize font-medium ${
-              order.status === "cancelled"
-                ? "bg-red-100 text-red-800"
-                : order.status === "completed" || order.status === "picked_up"
-                ? "bg-green-100 text-green-800"
-                : order.status === "in_progress"
-                ? "bg-blue-100 text-blue-800"
-                : "bg-yellow-100 text-yellow-800"
-            }`}
-          >
-            {statusLabel}
-          </span>
+          <OrderStatusBadge status={order.status} lang="en" />
         </div>
         <div className="flex items-center gap-3">
           <span className="text-gray-500 text-sm">

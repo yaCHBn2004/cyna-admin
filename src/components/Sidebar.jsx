@@ -15,12 +15,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 
 const Sidebar = () => {
   // Dark mode state with localStorage + system preference
-  const [darkMode, setDarkMode] = useState(() => {
-    if (localStorage.getItem("theme")) {
-      return localStorage.getItem("theme") === "dark";
-    }
-    return window.matchMedia("(prefers-color-scheme: dark)").matches;
-  });
+  const [darkMode, setDarkMode] = useState(false);
+
 
   useEffect(() => {
     if (darkMode) {
@@ -276,17 +272,21 @@ const SidebarItem = ({
   navigate,
   isActive,
 }) => {
+  const isSubItemActive = (subItems) =>
+    subItems.some((item) => isActive(item.path));
+
   const mainButtonStyles = {
-    backgroundColor: isActive(basePath) ? "var(--active-bg)" : "transparent",
-    color: isActive(basePath) ? "var(--active-text)" : "var(--text-primary)",
+    backgroundColor: !isSubItemActive(subItems) && isActive(basePath)
+      ? "var(--active-bg)"
+      : "transparent",
+    color: !isSubItemActive(subItems) && isActive(basePath)
+      ? "var(--active-text)"
+      : "var(--text-primary)",
   };
 
   return (
     <div>
-      <div
-        className="flex w-full px-3 py-3 rounded-md"
-        style={mainButtonStyles}
-      >
+      <div className="flex w-full px-3 py-3 rounded-md" style={mainButtonStyles}>
         <button
           onClick={() => {
             navigate(basePath);
@@ -309,10 +309,7 @@ const SidebarItem = ({
         </button>
         {fullyOpen && (
           <button onClick={() => setOpen(!open)} className="p-1">
-            <motion.div
-              animate={{ rotate: open ? 180 : 0 }}
-              transition={{ duration: 0.2 }}
-            >
+            <motion.div animate={{ rotate: open ? 180 : 0 }} transition={{ duration: 0.2 }}>
               <ChevronDownIcon className="h-4 w-4" />
             </motion.div>
           </button>
@@ -350,5 +347,6 @@ const SidebarItem = ({
     </div>
   );
 };
+
 
 export default Sidebar;

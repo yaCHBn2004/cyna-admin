@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Search, Circle, Triangle } from "lucide-react";
 import { useOrders } from "../../context/OrdersContext";
+import OrderStatusBadge from "../../components/OrderStatusBadge";
 
 const statusMapping = {
   order_placed: "En attente",
@@ -25,7 +26,9 @@ export default function Orders() {
     if (!apiOrders || apiOrders.length === 0) return;
     const mapped = apiOrders.map((o) => ({
       id: o.id,
-      date: o.created_at ? new Date(o.created_at).toLocaleDateString("fr-FR") : "-",
+      date: o.created_at
+        ? new Date(o.created_at).toLocaleDateString("fr-FR")
+        : "-",
       client: o.user?.name || "Client inconnu",
       total: parseFloat(o.total) || 0,
       status: statusMapping[o.status] || o.status || "Inconnu",
@@ -41,7 +44,8 @@ export default function Orders() {
     setSortConfig({ key, direction });
 
     const sorted = [...orders].sort((a, b) => {
-      if (key === "total") return direction === "asc" ? a.total - b.total : b.total - a.total;
+      if (key === "total")
+        return direction === "asc" ? a.total - b.total : b.total - a.total;
       if (key === "date")
         return direction === "asc"
           ? new Date(a.date) - new Date(b.date)
@@ -55,7 +59,9 @@ export default function Orders() {
     if (sortConfig.key !== key)
       return <Circle size={12} className="inline ml-1 text-gray-400" />;
     if (sortConfig.direction === "asc")
-      return <Triangle size={12} className="inline ml-1 rotate-180 text-primary" />;
+      return (
+        <Triangle size={12} className="inline ml-1 rotate-180 text-primary" />
+      );
     return <Triangle size={12} className="inline ml-1 text-primary" />;
   };
 
@@ -76,7 +82,10 @@ export default function Orders() {
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
           <div className="flex gap-2 flex-wrap">
             {Array.from({ length: 4 }).map((_, idx) => (
-              <div key={idx} className="h-8 w-20 bg-gray-200 rounded-xl animate-pulse"></div>
+              <div
+                key={idx}
+                className="h-8 w-20 bg-gray-200 rounded-xl animate-pulse"
+              ></div>
             ))}
           </div>
           <div className="h-10 w-64 bg-gray-200 rounded-xl animate-pulse mt-2 md:mt-0"></div>
@@ -150,11 +159,17 @@ export default function Orders() {
           <thead>
             <tr className="text-left border-b text-primary p-3 border-gray-100">
               <th className="py-3">ID Commande</th>
-              <th className="py-3 cursor-pointer" onClick={() => handleSort("date")}>
+              <th
+                className="py-3 cursor-pointer"
+                onClick={() => handleSort("date")}
+              >
                 Date {renderSortIcon("date")}
               </th>
               <th className="py-3">Client</th>
-              <th className="py-3 cursor-pointer" onClick={() => handleSort("total")}>
+              <th
+                className="py-3 cursor-pointer"
+                onClick={() => handleSort("total")}
+              >
                 Total {renderSortIcon("total")}
               </th>
               <th className="py-3">Statut</th>
@@ -164,23 +179,16 @@ export default function Orders() {
           <tbody>
             {filteredOrders.length > 0 ? (
               filteredOrders.map((order) => (
-                <tr key={order.id} className="border-b text-secondary border-gray-100">
+                <tr
+                  key={order.id}
+                  className="border-b text-secondary border-gray-100"
+                >
                   <td className="py-4">{order.id}</td>
                   <td className="py-4">{order.date}</td>
                   <td className="py-4">{order.client}</td>
                   <td className="py-4">{order.total.toFixed(2)} DZD</td>
                   <td className="py-4">
-                    <span
-                      className={`px-2 py-1 rounded text-xs ${
-                        order.status === "En attente"
-                          ? "bg-yellow-100 text-yellow-800"
-                          : order.status === "En cours"
-                          ? "bg-blue-100 text-blue-800"
-                          : "bg-green-100 text-green-800"
-                      }`}
-                    >
-                      {order.status}
-                    </span>
+                    <OrderStatusBadge status={order.status} lang="fr" />
                   </td>
                   <td className="py-4">
                     <Link
