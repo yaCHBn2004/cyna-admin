@@ -1200,7 +1200,7 @@ const handleSave = async () => {
         setActorType("sous-traitant");
         setPath([]);
       }}
-      className={` py-2 rounded-lg font-medium transition ${
+      className={`px-6 py-2 rounded-lg font-medium transition ${
         actorType === "sous-traitant"
           ? "bg-primary text-lightBlue"
           : "bg-lightBlue text-primary hover:bg-lightBlue"

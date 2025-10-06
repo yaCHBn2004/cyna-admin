@@ -177,7 +177,7 @@ const Sidebar = () => {
 
           {/* Orders */}
           <button
-            onClick={() => navigate("/admin/orders/1")} // Example, usually you'd list orders
+            onClick={() => navigate("/admin/orders/")} // Example, usually you'd list orders
             className="flex items-center w-full px-3 py-3 rounded-md"
             style={{
               backgroundColor: isActive("/admin/orders")

@@ -8,6 +8,7 @@ import SousTraitantDetails from "../features/client/SousTraitantDetails";
 import OrderDetails from "../pages/OrderDetails";
 import ClientStatsPage from "../pages/ClientStatsPage";
 import AuthPage from "../pages/AuthPage";
+import Orders from "../features/orders/Orders";
 
 export default function AdminRoutes() {
   return (
@@ -19,6 +20,8 @@ export default function AdminRoutes() {
         <Route path="dashboard" element={<Dashboard type="main" />} />
         <Route path="dashboard/large-format" element={<Dashboard type="large" />} />
         <Route path="dashboard/small-format" element={<Dashboard type="small" />} />
+         <Route path="orders/" element={ <Orders />} />
+        
 
         {/* Clients */}
         <Route path="clients/statistics" element={<ClientStatsPage />} />

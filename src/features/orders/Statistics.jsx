@@ -5,7 +5,8 @@ import TopProductsBarChart from "../../components/statisitics/TopProductsBarChar
 import { fetchYearlyOverview } from "../../services/orders.js";
 
 export default function Statistics() {
-  const [timeRange, setTimeRange] = useState("year");
+  const [timeRange, setTimeRange] = useState("month");
+
   const [metricType, setMetricType] = useState("revenue");
 
   const [stats, setStats] = useState([]);
