@@ -16,36 +16,44 @@ const statusMapping = {
 };
 
 export default function Orders() {
-  const { orders: apiOrders, loading, error } = useOrders();
+  const { orders: apiOrders, loading, error, fetchOrders } = useOrders();
   const [orders, setOrders] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filter, setFilter] = useState("Tous");
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
+  const [retrying, setRetrying] = useState(false);
 
+  // Map API data to local state
   useEffect(() => {
     if (!apiOrders || apiOrders.length === 0) return;
+
     const mapped = apiOrders.map((o) => ({
       id: o.id,
-      date: o.created_at
-        ? new Date(o.created_at).toLocaleDateString("fr-FR")
-        : "-",
+      date: o.created_at ? new Date(o.created_at).toLocaleDateString("fr-FR") : "-",
       client: o.user?.name || "Client inconnu",
       total: parseFloat(o.total) || 0,
       status: statusMapping[o.status] || o.status || "Inconnu",
     }));
+
     setOrders(mapped);
   }, [apiOrders]);
 
+  // Retry fetching if orders are empty
+  useEffect(() => {
+    if (!loading && (!apiOrders || apiOrders.length === 0) && !retrying) {
+      setRetrying(true);
+      fetchOrders(); // trigger fetch again
+    }
+  }, [loading, apiOrders, fetchOrders, retrying]);
+
   const handleSort = (key) => {
     let direction = "asc";
-    if (sortConfig.key === key && sortConfig.direction === "asc") {
-      direction = "desc";
-    }
+    if (sortConfig.key === key && sortConfig.direction === "asc") direction = "desc";
+
     setSortConfig({ key, direction });
 
     const sorted = [...orders].sort((a, b) => {
-      if (key === "total")
-        return direction === "asc" ? a.total - b.total : b.total - a.total;
+      if (key === "total") return direction === "asc" ? a.total - b.total : b.total - a.total;
       if (key === "date")
         return direction === "asc"
           ? new Date(a.date) - new Date(b.date)
@@ -56,13 +64,12 @@ export default function Orders() {
   };
 
   const renderSortIcon = (key) => {
-    if (sortConfig.key !== key)
-      return <Circle size={12} className="inline ml-1 text-gray-400" />;
-    if (sortConfig.direction === "asc")
-      return (
-        <Triangle size={12} className="inline ml-1 rotate-180 text-primary" />
-      );
-    return <Triangle size={12} className="inline ml-1 text-primary" />;
+    if (sortConfig.key !== key) return <Circle size={12} className="inline ml-1 text-gray-400" />;
+    return sortConfig.direction === "asc" ? (
+      <Triangle size={12} className="inline ml-1 rotate-180 text-primary" />
+    ) : (
+      <Triangle size={12} className="inline ml-1 text-primary" />
+    );
   };
 
   const filteredOrders = orders.filter((order) => {
@@ -75,56 +82,18 @@ export default function Orders() {
 
   if (error) return <p className="text-red-500">{error.message}</p>;
 
-  if (loading) {
-    return (
-      <div className="w-full space-y-4">
-        <div className="h-6 w-1/4 bg-gray-200 rounded animate-pulse"></div>
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
-          <div className="flex gap-2 flex-wrap">
-            {Array.from({ length: 4 }).map((_, idx) => (
-              <div
-                key={idx}
-                className="h-8 w-20 bg-gray-200 rounded-xl animate-pulse"
-              ></div>
-            ))}
-          </div>
-          <div className="h-10 w-64 bg-gray-200 rounded-xl animate-pulse mt-2 md:mt-0"></div>
-        </div>
-        <div className="overflow-x-auto p-3 w-full bg-darkerBg rounded-xl border-2 border-[var(--secondary)]">
-          <table className="w-full text-sm rounded-xl">
-            <thead>
-              <tr className="border-b border-gray-100">
-                {Array.from({ length: 6 }).map((_, i) => (
-                  <th key={i} className="py-3">
-                    <div className="h-4 bg-gray-200 rounded animate-pulse w-20"></div>
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {Array.from({ length: 5 }).map((_, idx) => (
-                <tr key={idx} className="border-b border-gray-100">
-                  {Array.from({ length: 6 }).map((__, i) => (
-                    <td key={i} className="py-4">
-                      <div className="h-4 bg-gray-200 rounded animate-pulse w-full"></div>
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    );
+  if (loading || (!apiOrders && retrying)) {
+    return <p className="text-gray-500">Chargement des commandes...</p>;
   }
 
   return (
     <div className="w-full">
       <h1 className="text-xl font-bold mb-4 text-primary">Commandes</h1>
 
+      {/* Filter & Search */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-2">
         <div className="flex gap-2 flex-wrap">
-          {["Tous", "En attente", "En cours", "Terminée"].map((f) => (
+          {["Tous", "En attente", "En cours", "Terminée", "Récupérée"].map((f) => (
             <button
               key={f}
               onClick={() => setFilter(f)}
@@ -154,22 +123,17 @@ export default function Orders() {
         </div>
       </div>
 
+      {/* Orders Table */}
       <div className="overflow-x-auto p-3 w-full bg-darkerBg rounded-xl border-2 border-[var(--secondary)]">
         <table className="w-full text-sm rounded-xl">
           <thead>
             <tr className="text-left border-b text-primary p-3 border-gray-100">
               <th className="py-3">ID Commande</th>
-              <th
-                className="py-3 cursor-pointer"
-                onClick={() => handleSort("date")}
-              >
+              <th className="py-3 cursor-pointer" onClick={() => handleSort("date")}>
                 Date {renderSortIcon("date")}
               </th>
               <th className="py-3">Client</th>
-              <th
-                className="py-3 cursor-pointer"
-                onClick={() => handleSort("total")}
-              >
+              <th className="py-3 cursor-pointer" onClick={() => handleSort("total")}>
                 Total {renderSortIcon("total")}
               </th>
               <th className="py-3">Statut</th>
@@ -179,10 +143,7 @@ export default function Orders() {
           <tbody>
             {filteredOrders.length > 0 ? (
               filteredOrders.map((order) => (
-                <tr
-                  key={order.id}
-                  className="border-b text-secondary border-gray-100"
-                >
+                <tr key={order.id} className="border-b text-secondary border-gray-100">
                   <td className="py-4">{order.id}</td>
                   <td className="py-4">{order.date}</td>
                   <td className="py-4">{order.client}</td>

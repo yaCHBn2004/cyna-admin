@@ -20,7 +20,10 @@ export default function AdminRoutes() {
         <Route path="dashboard" element={<Dashboard type="main" />} />
         <Route path="dashboard/large-format" element={<Dashboard type="large" />} />
         <Route path="dashboard/small-format" element={<Dashboard type="small" />} />
-         <Route path="orders/" element={ <Orders />} />
+        <Route path="dashboard/Main" element={<Dashboard type="main" />} />  
+
+      
+        
         
 
         {/* Clients */}
@@ -34,6 +37,7 @@ export default function AdminRoutes() {
         <Route path="products/:id/edit" element={<EditProduct />} />
 
         {/* Orders */}
+        <Route path="orders/" element={ <Orders />} />
         <Route path="orders/:id" element={<OrderDetails />} />
       </Route>
 

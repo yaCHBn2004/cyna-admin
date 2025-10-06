@@ -108,7 +108,7 @@ const Sidebar = () => {
             setOpen={setDashboardOpen}
             basePath="/admin/dashboard"
             subItems={[
-              { label: "Main Dashboard", path: "/admin/dashboard" },
+              { label: "Main Dashboard", path: "/admin/dashboard/Main" },
               { label: "Large Format", path: "/admin/dashboard/large-format" },
               { label: "Small Format", path: "/admin/dashboard/small-format" },
             ]}
