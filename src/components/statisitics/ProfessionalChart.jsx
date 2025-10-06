@@ -23,11 +23,11 @@ export function ProfessionalChart() {
         const chartData = [
           {
             name: "Professional",
-            value: parseFloat(res.professional_count) || 0,
+            value: parseFloat(res.professional_revenue) || 0,
           },
           {
             name: "Sous Traitant",
-            value: parseFloat(res.sous_traitant_count) || 0,
+            value: parseFloat(res.sous_traitant_revenue) || 0,
           },
         ];
 
