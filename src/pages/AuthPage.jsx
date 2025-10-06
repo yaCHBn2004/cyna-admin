@@ -1,37 +1,28 @@
-import React from 'react';
-import { Outlet, useLocation } from 'react-router-dom';
+import React from "react";
+import { useLocation } from "react-router-dom";
+import SignInForm from "../features/profile/SignInForm";
+import image2 from "../assets/images/4.jpg";
 
-
-import SignInForm from '../features/profile/SignInForm';
-import image from '../assets/images/signIn2.jpg';
 const AuthPage = () => {
   const location = useLocation();
 
-
- 
-  const quote = '"Votre image de marque, c’est ce que les gens disent de vous quand vous n’êtes pas dans la pièce." – Jeff Bezos';
+  const quote =
+    '"Votre image de marque, c’est ce que les gens disent de vous quand vous n’êtes pas dans la pièce." – Jeff Bezos';
 
   return (
     <div
-      className={`w-full h-screen flex bg-gray-100 relative `}
+      className="w-full h-screen bg-cover bg-center flex items-center justify-center  relative"
+      style={{ backgroundImage: `url(${image2})` }}
     >
-      {/* Image Section (hidden on small screens) */}
-      <div
-        className="hidden md:block w-1/2 h-full bg-cover bg-center relative"
-        style={{ backgroundImage: `url(${image})` }}
-      >
-        <div className="absolute inset-0 bg-black/40 flex items-end justify-center text-white p-6">
-          <p className="italic font-light text-center text-sm md:text-base max-w-sm">
-            {quote}
-          </p>
-        </div>
-      </div>
+      {/* Overlay */}
+      <div className="absolute inset-0 bg-gray-800/30" />
 
-      {/* Form Section */}
-      <div className="w-full md:w-1/2 h-full flex items-center justify-center px-6 overflow-y-auto">
-        <div className="w-full max-w-md">
-          < SignInForm/>
-        </div>
+      {/* Form container */}
+      <div className="relative z-10 w-full max-w-md p-8 bg-[var(--primBg)] mr-[50%] backdrop-blur-lg rounded-2xl shadow-lg">
+        <SignInForm />
+        <p className="italic font-light text-center text-gray-600 text-sm mt-6">
+          {quote}
+        </p>
       </div>
     </div>
   );

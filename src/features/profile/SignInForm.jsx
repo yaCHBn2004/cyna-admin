@@ -3,7 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import InputAuth from "../../components/auth/InputAuth";
 import { Eye, EyeOff } from "lucide-react";
 import { Loader2 } from "lucide-react";
-import googleLogo from "../../assets/icons/google.png";
+// import googleLogo from "../../assets/icons/google.png";
 import { signIn } from "../../services/auth";
 
 export default function SignInForm() {
@@ -58,9 +58,9 @@ export default function SignInForm() {
     }
   };
 
-  const handleGoogle = () => {
-    alert("Connexion Google à venir.");
-  };
+  // const handleGoogle = () => {
+  //   alert("Connexion Google à venir.");
+  // };
 
   // Gérer la touche "Enter"
   const handleKeyDown = (e) => {
@@ -153,13 +153,13 @@ export default function SignInForm() {
         </div>
 
         {/* Google Auth */}
-        <button
+        {/* <button
           onClick={handleGoogle}
           className="bg-main text-white font-semibold rounded-full flex items-center w-full h-12 justify-center space-x-3 hover:bg-opacity-90 transition"
         >
           <img src={googleLogo} alt="Google" className="w-5 h-5" />
           <span>Se connecter avec Google</span>
-        </button>
+        </button> */}
 
         {/* Sign up link */}
         <div className="text-center text-sm text-gray-600 mt-4">
