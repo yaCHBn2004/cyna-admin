@@ -76,7 +76,7 @@ export default function SignInForm() {
     >
       {/* Header */}
       <div className="w-full text-left">
-        <h1 className="text-3xl font-bold text-primary">Welcome Back !</h1>
+        <h1 className="text-xl md:text-3xl font-bold text-primary">Welcome Back!</h1>
         <p className="text-secondary text-sm mt-1">
           Please enter log in details below
         </p>
