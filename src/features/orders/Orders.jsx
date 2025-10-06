@@ -168,7 +168,7 @@ export default function Orders() {
                   <td className="py-4">{order.id}</td>
                   <td className="py-4">{order.date}</td>
                   <td className="py-4">{order.client}</td>
-                  <td className="py-4">{order.total.toFixed(2)} €</td>
+                  <td className="py-4">{order.total.toFixed(2)} DZD</td>
                   <td className="py-4">
                     <span
                       className={`px-2 py-1 rounded text-xs ${
