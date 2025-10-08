@@ -7,14 +7,15 @@ import App from "./App.jsx";
 // Initialize theme on app load
 const initializeTheme = () => {
   const savedTheme = localStorage.getItem("theme");
-  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-  
-  if (savedTheme === "dark" || (!savedTheme && prefersDark)) {
+
+  if (savedTheme === "dark") {
     document.documentElement.setAttribute("data-theme", "dark");
   } else {
+    // Default to light regardless of system mode
     document.documentElement.setAttribute("data-theme", "light");
   }
 };
+
 
 // Apply theme immediately to prevent flash
 initializeTheme();
